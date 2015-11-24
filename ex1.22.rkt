@@ -7,7 +7,7 @@
 
 (define (start-prime-test n start-time)
   (cond ((prime? n)
-    (report-prime (- (current-inexact-milliseconds) start-time)))))
+         (report-prime (- (current-inexact-milliseconds) start-time)))))
 
 (define (report-prime elapsed-time)
   (display " *** ")
@@ -35,9 +35,9 @@
 
 (define (search-for-primes start-range end-range)
   (if (even? start-range)
-    (search-for-primes (+ 1 start-range) end-range)
-    (cond ((< start-range end-range) (timed-prime-test start-range)
-          (search-for-primes (+ 2 start-range) end-range)))))
+      (search-for-primes (+ 1 start-range) end-range)
+      (cond ((< start-range end-range) (timed-prime-test start-range)
+             (search-for-primes (+ 2 start-range) end-range)))))
 
 ; prime         time elapse     predicted time
 ; ---------------------------------------------
