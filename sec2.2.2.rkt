@@ -1,6 +1,9 @@
 #lang racket
+; Section 2.2.2 Hierarchical Structures
 
 ; Exercise 2.24
+; interpreter prints:
+; '(1 (2 (3 4)))
 
 ; Exercise 2.25
 (let ([list1 (list 1 3 (list 5 7) 9)]
@@ -64,31 +67,34 @@
 (define (branch-structure branch)
   (cdr branch))
 
+; part b
 (define (total-weight mobile)
-  ; if the cdr of a given branch (the structure) is a weight (pair)
-  ; and not another mobile (list)
-  ; then i can return the weight
-  ;
-  ; therefore, if you give me branches, i can give you weight
-  ; how to test if given parameter is a branch?
-  ; anything whose car is a number (a pair) is a branch
-  (let ([mobile? (lambda (l) (list? (car l)))]
-        [branch? (lambda (l) (and (pair? (car l))
-                                  (not (list? (car l)))))]
-        [branch-weight (lambda (l) (cdr l))])
-    (cond
-      ((null? mobile) 0)
-      ((branch? mobile) (branch-weight mobile))
-      ((mobile? mobile) (+ (total-weight (left-branch mobile))
-                           (total-weight (right-branch mobile)))))))
+  (let* (
+         [branch? (lambda (x) (list? x))]
+         [mobile? (lambda (x) (and (branch? (left-branch x))
+                                   (branch? (right-branch x))))]
+         [weight? (lambda (x) (pair? x))])
+    (cond ((null? mobile)
+           0)
+          ((mobile? mobile)
+           (+ (total-weight (left-branch mobile))
+              (total-weight (right-branch mobile))))
+          ((and (branch? mobile)
+                (weight? (branch-structure mobile)))
+           (car (branch-structure mobile))))))
+
+; part c
+(define )
+
 
 ; misc
-(let* ([l (make-branch 1 2)]
-       [r (make-branch 3 4)]
-       [m1 (make-mobile l r)]
-       [m2 (make-mobile l m1)]
-       [m3 (make-mobile m1 m2)])
-  (displayln (total-weight m1)))
+(define l (make-branch 1 2))
+(define r (make-branch 3 4))
+(define m1 (make-mobile l r))
+(define m2 (make-mobile l m1))
+(define m3 (make-mobile m1 m2))
+
+(total-weight m3)
 
 (define (deep-count l)
   (cond ((not (list? l)) 1)

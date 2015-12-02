@@ -33,7 +33,6 @@
 ; "Does the order of the coin list matter?" Apparently not.
 ; Do not know why it would.
 
-
 ; Exercise 2.20
 (define (same-parity x . y)
   (let ([parity-test (if (even? x)

@@ -49,10 +49,10 @@
 ;   therefore, width of sum is function of widths of addends
 ;
 ;   not so for multiplication -
-;   (width-interval (mul-interval (make-interval a b)
-;                                 (make-interval c d)))
-;   (width-interval (mul-interval (make-interval a b)
-;                                 (make-interval b c)))))
+(width-interval (mul-interval (make-interval 1 2)
+                              (make-interval 3 4)))
+(width-interval (mul-interval (make-interval 1 2)
+                              (make-interval 2 3)))
 ;
 ;   width of factors consistent, but width of products not
 ;   therefore width of product not function of widths of factors
