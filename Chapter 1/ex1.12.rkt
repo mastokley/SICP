@@ -15,12 +15,8 @@
 ; this is an example of tree recursion
 
 (define (pascalCell r c)
-  (cond ((= r 1)
-         1)
-        ((= c 1)
-         1)
-        ((= r c)
-         1)
-        (else
-        (+ (pascalCell (- r 1) (- c 1))
-           (pascalCell (- r 1) c)))))
+  (cond ((= r 1) 1)
+        ((= c 1) 1)
+        ((= r c) 1)
+        (else (+ (pascalCell (- r 1) (- c 1))
+                 (pascalCell (- r 1) c)))))

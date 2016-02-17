@@ -5,16 +5,13 @@
 ; theta(n) steps
 ; theta(n) space
 (define (expt b n)
-  (if (= n 0)
-      1
-      (* b (expt b (- n 1)))))
+  (if (= n 0) 1 (* b (expt b (- n 1)))))
 
 ; equivalent linear iteration
 ; (recursive procedure 'evolves' a linear-iterative process)
 ; theta(n) steps
 ; theta(1) space
-(define (expt2 b n)
-  (expt-iter b n 1))
+(define (expt2 b n) (expt-iter b n 1))
 
 (define (expt-iter b counter product)
   (if (= counter 0)
@@ -31,11 +28,9 @@
         ((even? n) (square (fast-expt b (/ n 2))))
         (else (* b (fast-expt b (- n 1))))))
 
-(define (even? n)
-  (= (remainder n 2) 0))
+(define (even? n) (= (remainder n 2) 0))
 
-(define (square n)
-  (* n n))
+(define (square n) (* n n))
 
 ; equivalent iterative exponentiaton process
 ; uses successive squaring and a logarithmic number of steps
@@ -54,8 +49,9 @@
                        (* product product)
                        (* currentPower 2)
                        (- remainderPower currentPower)))
-          (else (ssExptIter base
-                            (* base product)
-                            (+ currentPower 1)
-                            (- remainderPower 1)))))
+          (else
+           (ssExptIter base
+                       (* base product)
+                       (+ currentPower 1)
+                       (- remainderPower 1)))))
   (ssExptIter b b 1 n))

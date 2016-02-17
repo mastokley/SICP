@@ -34,33 +34,22 @@
 ; Result of exercise 1.17
 
 (define (fast-* x y)
-  (define (even? x)
-    (= 0 (remainder x 2)))
-  (define (double x)
-    (+ x x))
+  (define (even? x) (= 0 (remainder x 2)))
+  (define (double x) (+ x x))
   (define (halve x)
-    (cond ((even? x)
-           (/ x 2))
+    (cond ((even? x) (/ x 2))
           (else (display "error"))))
-  (cond
-    ((= y 0)
-     0)
-    ((= y 1)
-     x)
-    ((even? y)
-     (double (fast-* x
-                     (halve y))))
-    (else (+ x (fast-* x (- y 1))))))
+  (cond ((= y 0) 0)
+        ((= y 1) x)
+        ((even? y) (double (fast-* x (halve y))))
+        (else (+ x (fast-* x (- y 1))))))
 
 ;
 
 (define (russianPeasantMethod x y)
-  (define (even? x)
-    (= 0 (remainder x 2)))
-  (define (double x)
-    (+ x x))
-  (define (halve x)
-           (/ x 2))
+  (define (even? x) (= 0 (remainder x 2)))
+  (define (double x) (+ x x))
+  (define (halve x) (/ x 2))
   (define (iter x y runningTotal)
     (if (> x 1)
         (iter (truncate (halve x))
@@ -72,7 +61,7 @@
             (+ y runningTotal)
             runningTotal)))
   (iter x y 0))
-            
+
 ; one iteration
 ; halve x, then round down to nearest integer
 ; double y

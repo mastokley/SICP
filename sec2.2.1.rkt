@@ -93,6 +93,11 @@ list of elements by cdr.
 
 ; Exercise 2.23
 (define (for-each proc l)
-  (cond ((not (null? l))
-         (proc (car l))
-         (for-each proc (cdr l)))))
+  (cond ((null? l) null)
+        (else (proc (car l))
+              (for-each proc (cdr l)))))
+
+; misc
+(define (print-cube x)
+  (display (* x x x))
+  (newline))

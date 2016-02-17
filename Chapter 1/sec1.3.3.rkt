@@ -1,7 +1,5 @@
 ; 1.3.3 Procedures as General Methods
-
 #lang racket
-
 ; methods of abstraction:
 ; compound procedures (defining new procedures e. g. 'square') vs. 
 ; higher-order procedures (procedures as arguments/parameters)
@@ -14,16 +12,16 @@
 (define (search f neg-point pos-point)
   (let ((midpoint (average neg-point pos-point)))
     (if (close-enough? neg-point pos-point)
-      midpoint
-      (let ((test-value (f midpoint)))
-        (cond ((positive? test-value)
-               (search f neg-point midpoint))
-              ((negative? test-value)
-               (search f midpoint pos-point))
-              (else midpoint))))))
+        midpoint
+        (let ((test-value (f midpoint)))
+          (cond ((positive? test-value)
+                 (search f neg-point midpoint))
+                ((negative? test-value)
+                 (search f midpoint pos-point))
+                (else midpoint))))))
 
-(define (close-enough? x y)
-  (< (abs (- x y)) 0.001))
+;(define (close-enough? x y)
+;  (< (abs (- x y)) 0.001))
 
 (define (average x y)
   (/ (+ x y) 2))
@@ -36,41 +34,59 @@
           ((and (positive? a-value) (negative? b-value))
            (search f b a))
           (else
-            (error "Values are not of opposite sign" a b)))))
+           (error "Values are not of opposite sign" a b)))))
 
 ;(define (sqrt x)
 ;  (fixed-point (lambda (y) (average y (/ x y))) 1.0))
 
 ; Exercise 1.35 show that the golden ratio is a fixed point of the
-; transformation x => 1 + 1/x, and use this fact to compute the 
+; transformation x => 1 + 1/x, and use this fact to compute the
 ; golden ratio by means of the fixed point procedure
+(define (close-enough? x y)
+  (< (abs (- x y)) 0.001))
 
-;(define (golden-ratio)
-;  (fixed-point (lambda (x) (+ 1
-;                              (/ 1 x)))
-;               1.0))
+(define tolerance 0.00001)
+
+(define (fixed-point f first-guess)
+  (define (close-enough? v1 v2)
+    (< (abs (- v1 v2)) tolerance))
+  (define (try guess)
+    (let ((next (f guess)))
+      (if (close-enough? guess next)
+          next
+          (try next))))
+  (try first-guess))
+
+(define golden-ratio
+  (fixed-point (lambda (x) (+ 1 (/ 1 x)))
+               1.0))
+
 ; Exercise 1.36 modify fixed-point to show approximations
 
-;(define tolerance 0.00001)
-;(define (fixed-point f first-guess)
-;  (define (close-enough? v1 v2)
-;    (< (abs (- v1 v2)) tolerance))
-;  (define (try guess)
-;    (display guess)
-;    (newline)
-;    (let ((next (f guess)))
-;      (if (close-enough? guess next)
-;       next
-;        (try next))))
-;  (try first-guess))
+(define (fixed-point-2 f first-guess)
+  (define (close-enough? v1 v2)
+    (< (abs (- v1 v2)) tolerance))
+  (define (try guess)
+    (let ((next (f guess)))
+      (display guess)
+      (newline)
+      (if (close-enough? guess next)
+          next
+          (try next))))
+  (try first-guess))
+
+(fixed-point-2 (λ (x)
+                 (average x
+                          (/ (log 1000)
+                             (log x))))
+               2.0)
 
 ;(define (ex1.36)
-;  (fixed-point (lambda (x)
-;                 (average x
-;                          (/ (log 1000)
-;                             (log x))))
-;               2.0))
-
+;  (fixed-point-2 (lambda (x)
+;                   (average x
+;                            (/ (log 1000)
+;                               (log x))))
+;                 2.0))
 ; Exercise 1.37
 ;
 ; k-term finite continued fraction
@@ -107,26 +123,22 @@
 (define (cont-frac-iter n d k)
   (define (iter i sum)
     (if (= i 0)
-      sum
-      (iter (- i 1)
-            (/ (n i)
-               (+ (d i)
-                  sum)))))
-  (iter (- k 1) (/ (n k)
-                   (d k))))
+        sum
+        (iter (- i 1)
+              (/ (n i) (+ (d i) sum)))))
+  (iter (- k 1)
+        (/ (n k) (d k))))
 
 ; Exercise 1.38
 
-(define (euler-cont-frac k)
-  (cont-frac (lambda (i) 1.0)
-             (lambda (i)
-               (cond ((= (modulo (+ i 1)
-                                 3) 
-                         0)
-                      (* (+ i 1)
-                         (/ 2 3)))
-                     (else 1)))
-             k))
+(define euler-cont-frac
+  (+ 2 (cont-frac (λ (i) 1.0)
+                  (λ (i)
+                    (cond ((= (modulo (+ i 1) 3) 0)
+                           (* (+ i 1) (/ 2 3)))
+                          (else
+                           1)))
+                  10)))
 
 ; Exercise 1.39
 
@@ -135,15 +147,15 @@
 
 (define (tan-cf1 x k)
   (/ x
-     (cont-frac-iter (lambda (x) (- (square x)))    ; this doesn't
-                                                    ; work - not same
-                                                    ; x because
-                                                    ; hyper-local
-                     (lambda (i) (- (* i 2) 1))
+     (cont-frac-iter (λ (x) (- (square x)))    ; this doesn't
+                     ; work - not same
+                     ; x because
+                     ; hyper-local
+                     (λ (i) (- (* i 2) 1))
                      k)))
 
 (define (tan-cf x k)
   (define (n k)
-    (if (= k 1) x (- (square x))))
-  (define (d k) (- (* k 2) 1))
+    (if (= k 1.0) x (- (square x))))
+  (define (d k) (- (* k 2.0) 1.0))
   (cont-frac n d k))

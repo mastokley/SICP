@@ -12,15 +12,14 @@
 ;
 
 (define (expmod base exp m)
-  (cond ((= exp 0) 1)
+  (cond ((= exp 0)
+         1)
         ((even? exp)
-         (remainder (square (expmod base (/ exp 2) m))
-                    m))
+         (remainder (square (expmod base (/ exp 2) m)) m))
         (else
-          (remainder (* base (expmod base (- exp 1) m))
-                     m))))
-(define (square n)
-  (* n n))
+         (remainder (* base (expmod base (- exp 1) m)) m))))
+
+(define (square n) (* n n))
 
 (define (Carmichael-number? n)
   (define (test n a)
@@ -28,8 +27,7 @@
     ; (display a)
     (cond ((= (+ a 1) n)
            (display " -- Success")))
-    (cond ((and (= (expmod a n n)
-                   (remainder a n))
+    (cond ((and (= (expmod a n n) (remainder a n))
                 (< (+ a 1) n))
            (test n (+ a 1)))))
   (test n 1))

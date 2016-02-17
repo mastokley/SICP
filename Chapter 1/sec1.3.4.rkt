@@ -61,38 +61,34 @@
 ; Exercise 1.40
 
 (define (cubic a b c)
-  (lambda (x) (+ (cube x)
+  (λ (x) (+ (cube x)
                  (* a (square x))
                  (* b x)
                  c)))
 
 ; Exercise 1.41
 
-(define (double f)
-  (lambda (x) (f (f x))))
+(define (double f) (λ (x) (f (f x))))
 
-(define (inc i)
-  (+ i 1))
+(define (inc i) (+ i 1))
 
 ; Exercise 1.42
 
 (define (compose f g)
-  (lambda (x)
-    (f (g x))))
+  (λ (x) (f (g x))))
 
 ; Exercise 1.43
 
 (define (repeated f n)
   (if (= n 1)
-    f
-    (compose f
-             (repeated f (- n 1)))))
+      f
+      (compose f (repeated f (- n 1)))))
 
 ; Exercise 1.44
 
 (define (smooth f)
   (define dx .00001)
-  (lambda (x)
+  (λ (x)
     (/ (+ (f (- x dx))
           (f x)
           (f (+ x dx)))
@@ -120,7 +116,7 @@
 ;               1.0))
 
 (define (nth-root x n)
-  (fixed-point (repeated (average-damp (lambda (y)
+  (fixed-point (repeated (average-damp (λ (y)
                                          (/ x
                                             (expt y (- n 1)))))
                          (log2 n))
@@ -130,15 +126,14 @@
   (/ (log x) (log 2)))
 
 ; Exercise 1.46
-
 (define (iterative-improve good-enough? improve-guess)
-  (lambda (guess)
+  (λ (guess)
     (if (good-enough? guess)
-      guess
-      ((iterative-improve good-enough? improve-guess)
-       (improve-guess guess)))))
-    ; can a lambda function, being anonymous,
-    ; be recursively defined?
+        guess
+        ((iterative-improve good-enough? improve-guess) (improve-guess guess)))))
+
+; can a lambda function, being anonymous,
+; be recursively defined?
 
 ; rewrite sqrt procedure from section 1.1.7
 
@@ -156,7 +151,7 @@
 ;   (> (abs (- (square guess) x)) .001))
 ; (define (sqrt x)
 ;   (sqrt-iter 1.0 x))
-; 
+;
 ; rewrite
 (define (sqrt x)
   (define (good-enough? guess)
@@ -188,6 +183,5 @@
   (define (good-enough? guess)  ; rewrite with one parameter only
     (< (abs (- guess (f guess)) tolerance)))
   (define tolerance .00001)
-  (define (improve-guess guess)
-    (f guess))
+  (define (improve-guess guess) (f guess))
   ((iterative-improve good-enough? improve-guess) first-guess))

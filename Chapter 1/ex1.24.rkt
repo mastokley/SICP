@@ -7,7 +7,7 @@
 
 (define (start-prime-test n start-time)
   (cond ((fast-prime? n 100)
-    (report-prime (- (current-inexact-milliseconds) start-time)))))
+         (report-prime (- (current-inexact-milliseconds) start-time)))))
 
 (define (report-prime elapsed-time)
   (display " *** ")
@@ -21,29 +21,25 @@
         ((divides? test-divisor n) test-divisor)
         (else (find-divisor n (next test-divisor)))))
 
-(define (divides? a b)
-  (= (remainder b a) 0))
+(define (divides? a b) (= (remainder b a) 0))
 
-(define (square x)
-  (* x x))
+(define (square x) (* x x))
 
-(define (prime? n)
-  (= n (smallest-divisor n)))
+(define (prime? n) (= n (smallest-divisor n)))
 
-(define (even? n)
-  (= (remainder n 2) 0))
+(define (even? n) (= (remainder n 2) 0))
 
 (define (search-for-primes start-range end-range)
   (if (even? start-range)
-    (search-for-primes (+ 1 start-range) end-range)
-    (cond ((< start-range end-range) (timed-prime-test start-range)
-          (search-for-primes (+ 2 start-range) end-range)))))
+      (search-for-primes (+ 1 start-range) end-range)
+      (cond ((< start-range end-range) (timed-prime-test start-range)
+             (search-for-primes (+ 2 start-range) end-range)))))
 
 ; prime         time elapse     predicted time
 ; ---------------------------------------------
-; 1009          0.0078125000000 
-; 1013          0.0080566406250 
-; 1019          0.0070800781250 
+; 1009          0.0078125000000
+; 1013          0.0080566406250
+; 1019          0.0070800781250
 ; 10007         0.0139160156250 0.02470529422007
 ; 10009         0.0141601562500 0.02547733466444
 ; 10037         0.0141601562500 0.02238917288693
@@ -64,8 +60,8 @@
          (remainder (square (expmod base (/ exp 2) m))
                     m))
         (else
-          (remainder (* base (expmod base (- exp 1) m))
-                     m))))
+         (remainder (* base (expmod base (- exp 1) m))
+                    m))))
 
 (define (fermat-test n)
   (define (try-it a)
